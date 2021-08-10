@@ -96,6 +96,8 @@ header {
   z-index: 1;
 }
 .drawer {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   width: 420px;
   height: 100vh;
@@ -106,6 +108,11 @@ header {
 
   h2 {
     margin: 0;
+  }
+  .items {
+    overflow: auto;
+    flex: 1;
+    margin-bottom: 40px;
   }
 }
 .cartItem {
@@ -138,5 +145,61 @@ header {
     &:hover {
       opacity: 1;
     }
+  }
+}
+
+.cartTotalBlock {
+  ul {
+    display: block;
+    margin-bottom: 40px !important;
+    li {
+      display: flex;
+      align-items: flex-end;
+      margin-bottom: 20px;
+
+      div {
+        flex: 1;
+        height: 1px;
+        border-bottom: 1px dashed #dfdfdf;
+        position: relative;
+        top: -4px;
+        margin: 0 7px;
+      }
+    }
+  }
+  .greenButton {
+    position: relative;
+
+    &:hover {
+      img {
+        transform: translateX(5px);
+      }
+    }
+
+    img {
+      position: absolute;
+      right: 30px;
+      top: 20px;
+      transition: transform 0.15s ease-in-out;
+    }
+  }
+}
+.greenButton {
+  width: 100%;
+  height: 55px;
+  background: #9dd558;
+  border-radius: 18px;
+  border: 0;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.1s ease-in-out;
+
+  &:hover {
+    background: lighten(#9dd558, 5%);
+  }
+  &:active {
+    background: darken(#9dd558, 5%);
   }
 }
