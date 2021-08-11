@@ -15,7 +15,9 @@ body {
   max-width: 1080px;
   margin: 50px auto;
 }
-
+.sneakers {
+  flex-wrap: wrap;
+}
 header {
   border-bottom: 1px solid #eaeaea;
 
