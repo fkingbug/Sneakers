@@ -6,7 +6,7 @@ function Card({ id, title, imageUrl, price, onFavorite, onPlus, favorited = fals
   const [isFavorite, setisFavorite] = React.useState(favorited)
 
   const onClickPlus = () => {
-    onPlus({ title, imageUrl, price })
+    onPlus({ id, title, imageUrl, price })
     setIsAdded(!isAdded)
   }
 

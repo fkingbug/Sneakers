@@ -18,7 +18,6 @@ function App() {
     axios
       .get('https://611545bd8f38520017a38415.mockapi.io/items')
       .then((res) => setItems(res.data))
-
     axios
       .get('https://611545bd8f38520017a38415.mockapi.io/cart')
       .then((res) => setCartItems(res.data))
@@ -27,10 +26,16 @@ function App() {
       .then((res) => setFavorites(res.data))
   }, [])
   const onAddToCart = (obj) => {
-    axios.post('https://611545bd8f38520017a38415.mockapi.io/cart', obj)
-    setCartItems((prev) => [...prev, obj])
+    try {
+      if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
+        axios.delete(`https://611545bd8f38520017a38415.mockapi.io/cart/${obj.id}`)
+        setCartItems((prev) => prev.filter((item) => Number(item.id) !== Number(obj.id)))
+      } else {
+        axios.post('https://611545bd8f38520017a38415.mockapi.io/cart', obj)
+        setCartItems((prev) => [...prev, obj])
+      }
+    } catch (error) {}
   }
-
   const onRemoveItem = (id) => {
     axios.delete(`https://611545bd8f38520017a38415.mockapi.io/cart/${id}`)
     setCartItems((prev) => prev.filter((item) => item.id !== id))
@@ -51,7 +56,6 @@ function App() {
       alert('Не удалось добавить в фавориты')
     }
   }
-
   const onChangeSearchInput = (event) => {
     serSearchValue(event.target.value)
   }
