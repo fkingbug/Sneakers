@@ -71,8 +71,12 @@ function App() {
   const onChangeSearchInput = (event) => {
     serSearchValue(event.target.value)
   }
+
+  const isItemAdded = (id) => {
+    return cartItems.some((obj) => Number(obj.id) === Number(id))
+  }
   return (
-    <AppContext.Provider value={{ items, cartItems, favorites }}>
+    <AppContext.Provider value={{ items, cartItems, favorites, isItemAdded }}>
       <div className="wrapper clear">
         {cartOpened && (
           <Drawer
