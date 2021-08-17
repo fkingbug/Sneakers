@@ -1,15 +1,32 @@
 import React from 'react'
+import axios from 'axios'
 
 import Info from './Info'
 import AppContext from '../context'
 
 function Drawer({ onClose, items = [], onRemoveItem }) {
-  const { setCartItems } = React.useContext(AppContext)
+  const { cartItems, setCartItems } = React.useContext(AppContext)
+  const [orderId, setOrderId] = React.useState(null)
   const [isOrderComplete, setIsOrderComplete] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false)
 
-  const onClickOrder = () => {
-    setIsOrderComplete(true)
-    setCartItems([])
+  const onClickOrder = async () => {
+    try {
+      setIsLoading(true)
+      const { data } = await axios.post(
+        'https://611545bd8f38520017a38415.mockapi.io/order',
+        {
+          items: cartItems,
+        },
+      )
+      await axios.put('https://611545bd8f38520017a38415.mockapi.io/order', [])
+      setOrderId(data.id)
+      setIsOrderComplete(true)
+      setCartItems([])
+    } catch (error) {
+      alert('Не удалось создать заказ :c')
+    }
+    setIsLoading(false)
   }
   return (
     <div className="overlay">
@@ -58,7 +75,7 @@ function Drawer({ onClose, items = [], onRemoveItem }) {
                   <b>1074 руб. </b>
                 </li>
               </ul>
-              <button onClick={onClickOrder} className="greenButton">
+              <button disabled={isLoading} onClick={onClickOrder} className="greenButton">
                 Оформить заказ <img src="/img/arrow.svg" alt="Arrow" />
               </button>
             </div>
@@ -68,7 +85,7 @@ function Drawer({ onClose, items = [], onRemoveItem }) {
             title={isOrderComplete ? 'Заказ оформлен!' : 'Корзина пустая'}
             description={
               isOrderComplete
-                ? 'Ваш заказ #18 скоро будет передан курьерской доставке'
+                ? `Ваш заказ #${orderId} скоро будет передан курьерской доставке`
                 : 'Добавьте хотя бы одну пару кроссовок , чтобы сделать заказ.'
             }
             image={isOrderComplete ? '/img/complete-order.jpg' : '/img/empty-cart.jpg'}
