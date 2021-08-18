@@ -2,10 +2,12 @@ import React from 'react'
 import axios from 'axios'
 
 import Info from './Info'
-import AppContext from '../context'
+import { useCart } from '../hooks/useCart'
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function Drawer({ onClose, items = [], onRemoveItem }) {
-  const { cartItems, setCartItems } = React.useContext(AppContext)
+  const { cartItems, setCartItems, totalPrice } = useCart()
   const [orderId, setOrderId] = React.useState(null)
   const [isOrderComplete, setIsOrderComplete] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
@@ -19,10 +21,16 @@ function Drawer({ onClose, items = [], onRemoveItem }) {
           items: cartItems,
         },
       )
-      await axios.put('https://611545bd8f38520017a38415.mockapi.io/order', [])
       setOrderId(data.id)
       setIsOrderComplete(true)
       setCartItems([])
+
+      //Чтобы мок апи не бокнуло столько запросов мы сделали костыль с дилеем ↓
+      for (let i = 0; i < cartItems.length; i++) {
+        const item = cartItems[i]
+        await axios.delete('https://611545bd8f38520017a38415.mockapi.io/cart/' + item.id)
+        await delay(1000)
+      }
     } catch (error) {
       alert('Не удалось создать заказ :c')
     }
@@ -67,12 +75,12 @@ function Drawer({ onClose, items = [], onRemoveItem }) {
                 <li>
                   <span>Итого:</span>
                   <div></div>
-                  <b>21 498 руб. </b>
+                  <b>{totalPrice} руб. </b>
                 </li>
                 <li>
                   <span>Налог 5%:</span>
                   <div></div>
-                  <b>1074 руб. </b>
+                  <b>{(totalPrice / 100) * 5} руб. </b>
                 </li>
               </ul>
               <button disabled={isLoading} onClick={onClickOrder} className="greenButton">
