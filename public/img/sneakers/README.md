@@ -7,7 +7,12 @@
 Но если нужно в коде изменить свг то лучше вставить ее кодом :
 
 ```javascript
-<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg
+  width="20"
+  height="20"
+  viewBox="0 0 20 20"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg">
   <path
     fill-rule="evenodd"
     clip-rule="evenodd"
@@ -33,3 +38,31 @@ header {
 
 Aрчаков сделал библиотку стилей чтобы не писать лишний scss код :
 https://github.com/Archakov06/macro-css
+
+PromiseAll ( для объекдинения запросов)
+
+до:
+
+```javascript
+const cartResponse = await axios.get('https://611545bd8f38520017a38415.mockapi.io/cart')
+const favoritesResponse = await axios.get(
+  'https://611545bd8f38520017a38415.mockapi.io/favorites',
+)
+const itemsResponse = await axios.get('https://611545bd8f38520017a38415.mockapi.io/items')
+
+setIsLoading(false)
+
+setCartItems(cartResponse.data)
+setFavorites(favoritesResponse.data)
+setItems(itemsResponse.data)
+```
+
+После :
+
+```javascript
+const [cartResponse, favoritesResponse, itemsResponse] = await Promise.all([
+  axios.get('https://611545bd8f38520017a38415.mockapi.io/cart'),
+  axios.get('https://611545bd8f38520017a38415.mockapi.io/favorites'),
+  axios.get('https://611545bd8f38520017a38415.mockapi.io/items'),
+])
+```
