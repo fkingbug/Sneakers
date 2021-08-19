@@ -1,8 +1,10 @@
 import React from 'react'
 import axios from 'axios'
 
-import Info from './Info'
-import { useCart } from '../hooks/useCart'
+import Info from '../Info'
+import { useCart } from '../../hooks/useCart'
+
+import styles from './Drawer.module.scss'
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -25,7 +27,7 @@ function Drawer({ onClose, items = [], onRemoveItem, opened }) {
       setIsOrderComplete(true)
       setCartItems([])
 
-      //Чтобы мок апи не бокнуло столько запросов мы сделали костыль с дилеем ↓
+      //Чтобы мокАпи не бокнуло столько запросов мы сделали костыль с дилеем ↓
       for (let i = 0; i < cartItems.length; i++) {
         const item = cartItems[i]
         await axios.delete('https://611545bd8f38520017a38415.mockapi.io/cart/' + item.id)
@@ -37,8 +39,8 @@ function Drawer({ onClose, items = [], onRemoveItem, opened }) {
     setIsLoading(false)
   }
   return (
-    <div className="overlay">
-      <div className="drawer">
+    <div className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}>
+      <div className={styles.drawer}>
         <h2 className="d-flex justify-between mb-30">
           Корзина
           <img
